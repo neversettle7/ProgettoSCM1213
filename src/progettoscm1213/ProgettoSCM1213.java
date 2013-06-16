@@ -5,34 +5,49 @@
 package progettoscm1213;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
 
 /**
  *
  * @author gioggi2002
  */
 public class ProgettoSCM1213 {
-
+    
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+        // Quante code genero?
+        Scanner input = new Scanner(System.in);
+        /*System.out.println("Quante code devo generare?");
+         * int ncode = input.nextInt();*/
         
-        // Genero numero code
-        List queue1 = new ArrayList();
-        List queue2 = new ArrayList();
-        List queue3 = new ArrayList();
-        List queue4 = new ArrayList();
+        System.out.println("Quanti thread devo generare per ogni coda?");
+        int nthreads = input.nextInt();
+        System.out.println("Sto per generare "+nthreads+" threads per ogni coda.");
         
-        // Genero numero processi in coda
+        // Genero una HashMap in cui inserire le code (per farvi riferimento)
+        Map liste = new HashMap();
         
-        
-        // Prendo quanto di tempo in input
-        
-        
-        Pacchetto p = new Pacchetto();
-        Thread t = new Thread(p);
-        t.start();
+        // Genero code
+        // Genero x pacchetti nella coda
+        System.out.println("Sto per generare 5 code con "+nthreads+" processi in ognuna.");
+        List lista1 = new ArrayList();
+        List lista2 = new ArrayList();
+        List lista3 = new ArrayList();
+        List lista4 = new ArrayList();
+        for (int y = 1; y != nthreads+1; y++){
+            Pacchetto p = new Pacchetto("Pacchetto #"+y);
+            Thread t = new Thread(p);
+            lista1.add(t);
+            lista2.add(t);
+            lista3.add(t);
+            lista4.add(t);
+        }
+        // Prendo il primo pacchetto nella coda e lo faccio eseguire
+        System.out.println("Lista1 size: "+lista1.size());
     }
 }
