@@ -5,6 +5,7 @@
 package progettoscm1213;
 
 import java.util.ArrayList;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -15,6 +16,7 @@ import java.util.logging.Logger;
 public class Queue extends Thread {
     private int id;
     private final int nthreads;
+    public ReentrantLock service = new ReentrantLock();
     
     public Queue(int id, int nthreads){
         this.id = id;
@@ -24,21 +26,34 @@ public class Queue extends Thread {
     @Override
     public void run() {
         //System.out.println("Sono la lista #"+this.id+" e sto per generare "+nthreads+" pacchetti.");
-        ArrayList coda = new ArrayList();
+        ArrayList<Pacchetto> coda = new ArrayList();
         Pacchetto p[] = new Pacchetto[nthreads];
-        for (int i = 0; i < nthreads; i++){
-            p[i] = new Pacchetto(id+1, i);
+        int i = 0;
+        while (i < nthreads){
+            p[i] = new Pacchetto(id+1, i+1);
             coda.add(p[i]);
-            p[i].start();
-            try {
-                this.sleep(50);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(Queue.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            System.out.println("Coda: "+(id+1)+" - Pacchetto: "+i+" - Dimensione: "+p[i].dimensione);
+            i++;
         }
-        //System.out.println("Sono la lista #"+this.id+" e la mia coda è di "+coda.size()+" elementi.");
-        //System.out.println("Sono la lista #"+this.id+" e termino.");
+        System.out.println("Generazione della coda "+(id)+" conclusa, "+nthreads+" pacchetti caricati.");
+        i = 0;
+        int y = 0;
+        while (i < nthreads){
+            service.lock();
+            try {
+                boolean esito = p[i].verifica(p[i].dimensione);
+                if (esito == true){
+                    i++;
+                }
+            } finally {
+                service.unlock();
+            }
+        }
+        System.out.println("Sono la lista #"+this.id+" e termino la generazione dei pacchetti.");
     }
-
+    
+    public void servizio() {
+        for (int i = 0; i < nthreads; i++){
+            
+        }
+    }
 }

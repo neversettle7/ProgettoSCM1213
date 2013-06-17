@@ -8,18 +8,24 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.concurrent.locks.ReentrantLock;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author gioggi2002
  */
 public class Main {
+    public static ReentrantLock queue;
+    public static int quantum;
     
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-
+        ReentrantLock queue = new ReentrantLock(true);
+        
         // Quante code genero?
         Scanner input = new Scanner(System.in);
         System.out.println("Quante code devo generare?");
@@ -30,11 +36,7 @@ public class Main {
         
         System.out.println("Quanto è il quanto di tempo? (i pacchetti avranno una dimensione"
                 + " massima generata tra 1 e 500ms");
-        int quantum = input.nextInt();
-        Util.clearConsole();
-        
-        // Genero una HashMap in cui inserire le code (per farvi riferimento)
-        Map liste = new HashMap();
+        quantum = input.nextInt();
         
         // Genero code
         // Genero x pacchetti nella coda
@@ -45,8 +47,20 @@ public class Main {
                 q[i] = new Queue(i+1, nthreads);
                 listacode.add(q[i]);
                 q[i].start();
+            try {
+                q[i].join();
+            } catch (InterruptedException ex) {
+                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
             }
-        // 
+            }
+        // Faccio partire le liste
+        for (int i = 0; i < ncode; i++){
+                q[i] = new Queue(i+1, nthreads);
+                listacode.add(q[i]);
+                q[i].servizio();
+            }
         
+        // Termino la main
+        System.out.println("*** La main termina ***");
     }
 }
