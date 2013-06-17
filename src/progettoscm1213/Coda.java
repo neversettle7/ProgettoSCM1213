@@ -16,6 +16,8 @@ public class Coda extends Thread {
     private int contatoreripetizioni;
     private int contatorepacchetti = 1;
     private int id;
+    private int deficit = 0;
+    private int deficitiniziale = 0;
     
     public Coda(int id){
         this.id = id;
@@ -30,7 +32,7 @@ public class Coda extends Thread {
         // System.out.println("La coda contiene "+coda.size()+" elementi.");
         // Settiamo il quantum
         quantumattuale = Main.quantum;
-        System.out.println("--Coda "+this.id+" in partenza con "+coda.size()+" elementi.");
+        System.out.println("--Coda "+this.id+" in partenza con "+coda.size()+" pacchetti.");
         // Fin quando i pacchetti non sono finiti
         while (coda.isEmpty() == false){
             // Eseguo operazioni sulla coda
@@ -38,40 +40,55 @@ public class Coda extends Thread {
         }
         
         // Termino
-        System.out.println("Coda "+this.id+" ha terminato gli elementi.");
+        System.out.println("Coda "+this.id+" - Pacchetti terminati.");
     }
     
     public void service(ArrayList<Pacchetto> coda){
         // Prendo controllo
         Main.queue.lock();
-        // Quantum attuale = quantum * contatoreripetizioni delle ripetizioni
-        if (contatoreripetizioni > 0){
-            quantumattuale = Main.quantum * (contatoreripetizioni+1);
-        }
+        
+        quantumattuale = Main.quantum + deficit;
+        
         // Controllo se dimensioni pacchetto >= quanto di tempo
         if (coda.get(0).dimensione <= quantumattuale){
-            int dimensione = coda.get(0).dimensione;
-            // Eseguo pacchetto
-            System.out.println("C"+this.id+"P"+contatorepacchetti+" servito. (D="+dimensione+" - Q="+quantumattuale+")");
-            // Scarto pacchetto
             
-            // Resetto quantum
-            quantumattuale = Main.quantum;
+            // Prendo la dimensione del pacchetto
+            int dimensione = coda.get(0).dimensione;
+            
+            // Calcolo il deficit
+            deficitiniziale = deficit;
+            deficit = quantumattuale - dimensione;
+            
+            disegno(coda, deficit, deficitiniziale, this.id);
+            //System.out.println("Deficit attuale: "+deficit);
+            
+            // Servo pacchetto
+            System.out.println("CODA "+this.id+" - PACCHETTO "+contatorepacchetti+" SERVITO. (D="+dimensione+" - Q="+quantumattuale+")");
             
             // Rimuovo il pacchetto appena passato
             coda.remove(0);
+            
             // Azzero il contatore delle ripetizioni
             contatoreripetizioni = 0;
+            
             // Passo a elemento successivo della lista
             contatorepacchetti++;
+            
             //System.out.println("La coda contiene ancora "+coda.size()+" elementi.");
             // Cedo controllo
             Main.queue.unlock();
         } else {
+            // Prendo la dimensione del pacchetto
             int dimensione = coda.get(0).dimensione;
+            
             // Aumento contatoreripetizioni per segnalare che avrò un multiplo del quantum al prossimo giro
-            System.out.println("C"+this.id+"P"+contatorepacchetti+" NON servito. (D="+dimensione+" - Q="+quantumattuale+")");
-            contatoreripetizioni++;
+            //System.out.println("C"+this.id+"P"+contatorepacchetti+" NON servito. (D="+dimensione+" - Q="+quantumattuale+")");
+            
+            // Calcolo il deficit
+            deficitiniziale = deficit;
+            deficit = quantumattuale;
+            disegno(coda, deficit, deficitiniziale, this.id);
+            
             // Cedo controllo
             Main.queue.unlock();
         }
@@ -105,7 +122,13 @@ public class Coda extends Thread {
     public int generaDimensione() {
         // Generiamo una dimensione random per i pacchetti
         Random randomgen = new Random();
-        int dimension = randomgen.nextInt(500);
+        int dimension = randomgen.nextInt(1000);
         return dimension;
+    }
+    
+    public void disegno(ArrayList<Pacchetto> coda, int deficit, int deficitiniziale, int id) {
+        //int dimensione0 = coda.get(0).dimensione;
+            int dimensione0 = coda.get(0).dimensione;
+            System.out.println("CODA "+id+"   |----"+dimensione0+"----|   ->   DI: "+deficitiniziale+"   DF: "+deficit);
     }
 }
