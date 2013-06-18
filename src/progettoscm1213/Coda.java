@@ -13,7 +13,6 @@ import java.util.Random;
  */
 public class Coda extends Thread {
     private int quantumattuale;
-    private int contatoreripetizioni;
     private int contatorepacchetti = 1;
     private int id;
     private int deficit = 0;
@@ -26,7 +25,7 @@ public class Coda extends Thread {
     @Override
     public void run() {
         // Genero pacchetti
-        ArrayList<Pacchetto> coda = new ArrayList();
+        ArrayList<Pacchetto> coda = new ArrayList<Pacchetto>();
         coda = generaPacchetti(coda, Main.npacchetti);
         // Controllo se coda vuota o meno
         // System.out.println("La coda contiene "+coda.size()+" elementi.");
@@ -56,7 +55,7 @@ public class Coda extends Thread {
             int dimensione = coda.get(0).dimensione;
             
             // Calcolo il deficit
-            deficitiniziale = deficit;
+            deficitiniziale = deficit + Main.quantum;
             deficit = quantumattuale - dimensione;
             
             disegno(coda, deficit, deficitiniziale, this.id);
@@ -68,9 +67,6 @@ public class Coda extends Thread {
             // Rimuovo il pacchetto appena passato
             coda.remove(0);
             
-            // Azzero il contatore delle ripetizioni
-            contatoreripetizioni = 0;
-            
             // Passo a elemento successivo della lista
             contatorepacchetti++;
             
@@ -79,7 +75,7 @@ public class Coda extends Thread {
             Main.queue.unlock();
         } else {
             // Prendo la dimensione del pacchetto
-            int dimensione = coda.get(0).dimensione;
+            //int dimensione = coda.get(0).dimensione;
             
             // Aumento contatoreripetizioni per segnalare che avrò un multiplo del quantum al prossimo giro
             //System.out.println("C"+this.id+"P"+contatorepacchetti+" NON servito. (D="+dimensione+" - Q="+quantumattuale+")");
@@ -94,7 +90,7 @@ public class Coda extends Thread {
         }
     }
     
-    public ArrayList generaPacchetti(ArrayList<Pacchetto> coda, int npacchetti) {
+    public ArrayList<Pacchetto> generaPacchetti(ArrayList<Pacchetto> coda, int npacchetti) {
         
         /*
          * DECOMMENTARE SE SI VUOLE DECIDERE QUANTI PACCHETTI GENERARE (anche nella main)
@@ -127,8 +123,7 @@ public class Coda extends Thread {
     }
     
     public void disegno(ArrayList<Pacchetto> coda, int deficit, int deficitiniziale, int id) {
-        //int dimensione0 = coda.get(0).dimensione;
-            int dimensione0 = coda.get(0).dimensione;
-            System.out.println("CODA "+id+"   |----"+dimensione0+"----|   ->   DI: "+deficitiniziale+"   DF: "+deficit);
+        int dimensione0 = coda.get(0).dimensione;
+        System.out.println("CODA "+id+"   |----"+dimensione0+"----|   ->   DI: "+deficitiniziale+"   DF: "+deficit);
     }
 }

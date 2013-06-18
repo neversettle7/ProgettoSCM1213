@@ -15,7 +15,6 @@ public class Main {
     public static int quantum;
     public static int npacchetti;
     public static final ReentrantLock queue = new ReentrantLock(true);
-    public static final ReentrantLock start = new ReentrantLock();
     
     /**
      * @param args the command line arguments
@@ -34,10 +33,10 @@ public class Main {
         System.out.println("/******************************************/");
         System.out.println("\n");
         System.out.println("Il programma simula un algoritmo di routing Deficit Round Robin.");
-        System.out.println("Vi verrà chiesto quante code generare e la lunghezza del quanto di tempo.");
-        System.out.println("Il numero dei pacchetti per ogni coda verrà poi generato casualmente (compreso tra 1 e 10) ");
-        System.out.println("così come il tempo a loro necessario (compreso tra 1 e 1000).");
-        System.out.println("Per inserire un numero di pacchetti fissi per ogni coda, è sufficiente ");
+        System.out.println("Vi verr�� chiesto quante code generare e la lunghezza del quanto di tempo.");
+        System.out.println("Il numero dei pacchetti per ogni coda verr�� poi generato casualmente (compreso tra 1 e 10) ");
+        System.out.println("cos�� come il tempo a loro necessario (compreso tra 1 e 1000).");
+        System.out.println("Per inserire un numero di pacchetti fissi per ogni coda, �� sufficiente ");
         System.out.println("decommentare la parte relativa nel codice sorgente.");
         System.out.println();
         
@@ -50,6 +49,8 @@ public class Main {
             input.next();
         }
         int ncode = input.nextInt();
+        
+        input.close();
         
         
         /*
@@ -64,8 +65,8 @@ public class Main {
          * npacchetti = input.nextInt();
          */
         
-        // Quanto sarà il quantum?
-        System.out.println("Quanto è lungo il quanto di tempo?");
+        // Quanto sar�� il quantum?
+        System.out.println("Quanto �� lungo il quanto di tempo?");
         while (!input.hasNextInt())
         {
             System.out.printf("Hai inserito un input non valido. Ricordati di aggiungere solo numeri. Ritenta.\n");
@@ -74,12 +75,10 @@ public class Main {
         quantum = input.nextInt();
         
         // Genero code (che genereranno i pacchetti)
-        queue.lock();
         Coda coda[] = new Coda[ncode];
         for (int i = 0; i < ncode; i++){
             coda[i] = new Coda(i+1);
             coda[i].start();
         }
-        queue.unlock();
     }
 }
