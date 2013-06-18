@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package progettoscm1213;
 
 import java.util.ArrayList;
@@ -9,7 +5,7 @@ import java.util.Random;
 
 /**
  *
- * @author gioggi2002
+ * @author Giovanni Dini
  */
 public class Coda extends Thread {
     private int quantumattuale;
@@ -25,7 +21,7 @@ public class Coda extends Thread {
     @Override
     public void run() {
         // Genero pacchetti
-        ArrayList<Pacchetto> coda = new ArrayList<Pacchetto>();
+        ArrayList<Pacchetto> coda = new ArrayList<>();
         coda = generaPacchetti(coda, Main.npacchetti);
         // Controllo se coda vuota o meno
         // System.out.println("La coda contiene "+coda.size()+" elementi.");

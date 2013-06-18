@@ -1,12 +1,8 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package progettoscm1213;
 
 /**
  *
- * @author gioggi2002
+ * @author Giovanni Dini
  */
 public class Pacchetto {
     public int dimensione;

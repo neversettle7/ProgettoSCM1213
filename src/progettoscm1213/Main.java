@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package progettoscm1213;
 
 import java.util.Scanner;
@@ -9,7 +5,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 /**
  *
- * @author gioggi2002
+ * @author Giovanni Dini
  */
 public class Main {
     public static int quantum;
@@ -33,10 +29,10 @@ public class Main {
         System.out.println("/******************************************/");
         System.out.println("\n");
         System.out.println("Il programma simula un algoritmo di routing Deficit Round Robin.");
-        System.out.println("Vi verr�� chiesto quante code generare e la lunghezza del quanto di tempo.");
-        System.out.println("Il numero dei pacchetti per ogni coda verr�� poi generato casualmente (compreso tra 1 e 10) ");
-        System.out.println("cos�� come il tempo a loro necessario (compreso tra 1 e 1000).");
-        System.out.println("Per inserire un numero di pacchetti fissi per ogni coda, �� sufficiente ");
+        System.out.println("Vi verrà chiesto quante code generare e la lunghezza del quanto di tempo.");
+        System.out.println("Il numero dei pacchetti per ogni coda verrà poi generato casualmente (compreso tra 1 e 10) ");
+        System.out.println("così come il tempo a loro necessario (compreso tra 1 e 1000).");
+        System.out.println("Per inserire un numero di pacchetti fissi per ogni coda, è sufficiente ");
         System.out.println("decommentare la parte relativa nel codice sorgente.");
         System.out.println();
         
@@ -50,9 +46,6 @@ public class Main {
         }
         int ncode = input.nextInt();
         
-        input.close();
-        
-        
         /*
          * DECOMMENTARE SE SI VUOLE DECIDERE QUANTI PACCHETTI GENERARE
          * Quanti pacchetti genero?
@@ -65,14 +58,17 @@ public class Main {
          * npacchetti = input.nextInt();
          */
         
-        // Quanto sar�� il quantum?
-        System.out.println("Quanto �� lungo il quanto di tempo?");
+        // Quanto sarà il quantum?
+        System.out.println("Quanto è lungo il quanto di tempo?");
         while (!input.hasNextInt())
         {
             System.out.printf("Hai inserito un input non valido. Ricordati di aggiungere solo numeri. Ritenta.\n");
             input.next();
         }
         quantum = input.nextInt();
+        
+        // Chiudiamo lo scanner
+        input.close();
         
         // Genero code (che genereranno i pacchetti)
         Coda coda[] = new Coda[ncode];
